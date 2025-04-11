@@ -44,7 +44,7 @@ CREATE TABLE UtbildningsLedare (
     Utbildningsledare_id SERIAL PRIMARY KEY NOT NULL,
     Fornamn VARCHAR(50) NOT NULL,
     Efternamn VARCHAR(50) NOT NULL,
-    Personuppgifter_id INT NOT NULL UNIQUE,
+    Personuppgifter_id INT NOT NULL UNIQUE, -- One-to-One cardinality with personuppgifter, we add UNIQUE to ensure only one related record exists. 
     Konsult_id INT,
     Konsult BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (Personuppgifter_id) REFERENCES Personuppgifter(Personuppgifter_id) ON DELETE CASCADE,  -- Deleting an UtbildningsLedare will delete the associated Personuppgifter
@@ -56,7 +56,7 @@ CREATE TABLE Utbildare (
     Utbildare_id SERIAL PRIMARY KEY NOT NULL,
     Fornamn VARCHAR(50) NOT NULL,
     Efternamn VARCHAR(50) NOT NULL,
-    Personuppgifter_id INT NOT NULL UNIQUE,
+    Personuppgifter_id INT NOT NULL UNIQUE, -- One-to-One cardinality, we add UNIQUE to ensure only one related record exists. 
     Konsult_id INT,
     Konsult BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (Personuppgifter_id) REFERENCES Personuppgifter(Personuppgifter_id) ON DELETE CASCADE, -- Deleting an Utbildare will delete associated Personuppgifter
@@ -78,8 +78,8 @@ CREATE TABLE Student (
     Student_id SERIAL PRIMARY KEY NOT NULL,
     Fornamn VARCHAR(50) NOT NULL,
     Efternamn VARCHAR(50) NOT NULL,
-    Personuppgifter_id INT NOT NULL UNIQUE,
-    Klass_id INT NOT NULL,  -- Add Klass_id to reference the Klass table
+    Personuppgifter_id INT NOT NULL UNIQUE, -- One-to-One cardinality, we add UNIQUE to ensure only one related record exists. 
+    Klass_id INT NOT NULL, 
     FOREIGN KEY (Personuppgifter_id) REFERENCES Personuppgifter(Personuppgifter_id) ON DELETE CASCADE, -- Deleting an Student will delete associated Personuppgifter
     FOREIGN KEY (Klass_id) REFERENCES Klass(Klass_id)
 );
@@ -110,7 +110,7 @@ CREATE TABLE Kurs (
 CREATE TABLE ProgramKurs (
     Program_id INT NOT NULL,
     Kurs_id INT NOT NULL,
-    PRIMARY KEY (Program_id, Kurs_id),
+    PRIMARY KEY (Program_id, Kurs_id), -- composite primary key (program_id & kurs_id)
     FOREIGN KEY (Program_id) REFERENCES Program(Program_id),
     FOREIGN KEY (Kurs_id) REFERENCES Kurs(Kurs_id) 
 );
